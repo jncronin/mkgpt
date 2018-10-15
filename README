@@ -1,0 +1,5 @@
+mkgpt
+
+A simple tool for creating disk images with a GPT header and including the
+contents of provided partition images.
+
