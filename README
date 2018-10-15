@@ -3,3 +3,54 @@ mkgpt
 A simple tool for creating disk images with a GPT header and including the
 contents of provided partition images.
 
+Compiling:
+
+./configure
+make
+sudo make install
+
+A Visual C++ 2012 project is also provided for Windows builds
+
+
+Options:
+
+ -o <output_file> 		Specify output filename
+ --sector-size <size>		Size of a sector (defaults to 512)
+ --minimum-image-size <size>	Minimum size of the image in sectors
+					(defaults to 2048)
+ --disk-guid <guid>		GUID of the entire disk (see GUID format
+					below - defaults to random)
+
+ --part	<file> <options>	Begin a partition entry containing the
+					specified image as its data and
+					options as below
+
+
+Partition options
+ --name <name>			Set the name of the entry in the GPT
+ --type <type>			Set the type of the entry, either a GUID,
+					MBR partition ID _in decimal_ or
+					one of the known paritition types
+ --uuid <guid>			Specify the UUID of the partition in the GPT
+					(defaults to a random uuid)
+
+
+
+Known partition types:
+system 	- EFI sytem partition
+bios 	- BIOS boot partition
+FAT types: fat12, fat16, fat16b, fat32, fat16x, fat32x, fat16+, fat32+
+NTFS types: ntfs
+Linux types: linux
+
+
+
+
+GUID format:
+GUIDs/UUIDs should be represented in the canonical representation as per
+https://en.wikipedia.org/wiki/Universally_unique_identifier#Format
+without any surrounding braces.  An example is:
+123E4567-E89B-12D3-A456-426655440000
+
+Optionally, the string 'random' can be used to generate a random GUID.
+
