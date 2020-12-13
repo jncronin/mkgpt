@@ -5,6 +5,9 @@ contents of provided partition images.
 
 Compiling:
 
+automake --add-missing		(Run these two commands if building
+autoreconf			directly from git clone)
+
 ./configure
 make
 sudo make install
