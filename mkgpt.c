@@ -469,7 +469,7 @@ int check_parts()
 	}
 	else if(image_sects < needed_file_length)
 	{
-		fprintf(stderr, "requested image size (%lu) is too small to hold the partitions\n", image_sects * sect_size);
+		fprintf(stderr, "requested image size (%llu) is too small to hold the partitions\n", image_sects * sect_size);
 		return -1;
 	}
 
@@ -496,7 +496,7 @@ void write_output()
 	mbr[446 + 7] = 0xff;						/* EndingCHS = 0xffffff */
 	*(uint32_t *)&mbr[446 + 8] = 0x1;			/* StartingLBA = 1 */
 		
-	if(image_sects > 0xffffffff)
+	if(image_sects > (long int)0xffffffff)
 		*(uint32_t *)&mbr[446 + 12] = 0xffffffff;
 	else
 		*(uint32_t *)&mbr[446 + 12] = (uint32_t)image_sects - 1;
