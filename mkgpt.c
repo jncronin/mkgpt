@@ -39,8 +39,8 @@ void write_output();
 int CalculateCrc32 (uint8_t *Data, size_t DataSize, uint32_t *CrcOut);
 
 size_t sect_size = 512;
-long image_sects = 0;
-long min_image_sects = 2048;
+long long image_sects = 0;
+long long min_image_sects = 2048;
 PART *first_part = NULL;
 PART *last_part = NULL;
 FILE *output = NULL;
@@ -158,7 +158,7 @@ int parse_opts(int argc, char **argv)
 				return -1;
 			}
 		
-			min_image_sects = atoi(argv[i]);
+			min_image_sects = atoll(argv[i]);
 
 			if(min_image_sects < 2048)
 			{
@@ -177,7 +177,7 @@ int parse_opts(int argc, char **argv)
 				return -1;
 			}
 		
-			image_sects = atoi(argv[i]);
+			image_sects = atoll(argv[i]);
 
 			i++;		
 		}
@@ -469,7 +469,7 @@ int check_parts()
 	}
 	else if(image_sects < needed_file_length)
 	{
-		fprintf(stderr, "requested image size (%lu) is too small to hold the partitions\n", image_sects * sect_size);
+		fprintf(stderr, "requested image size (%lli) is too small to hold the partitions\n", image_sects * sect_size);
 		return -1;
 	}
 
