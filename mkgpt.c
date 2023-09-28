@@ -230,7 +230,7 @@ int parse_opts(int argc, char **argv)
 				fprintf(stderr, "no partition image specified for partition %i\n", cur_part_id);
 				return -1;
 			}
-			cur_part->src = fopen(argv[i], "r");
+			cur_part->src = fopen(argv[i], "rb");
 			if(cur_part->src == NULL)
 			{
 				fprintf(stderr, "unable to open partition image (%s) for partition (%i) - %s\n", argv[i],
@@ -525,7 +525,7 @@ void write_output()
 	*(uint64_t *)&gpt[48] = secondary_headers_sect - 1;	/* LastUsableLBA */
 	guid_to_bytestring(&gpt[56], &disk_guid);			/* DiskGUID */
 	*(uint64_t *)&gpt[72] = 0x2;						/* PartitionEntryLBA */
-	*(uint32_t *)&gpt[80] = part_count;					/* NumberOfPartitionEntries */
+	*(uint32_t *)&gpt[80] = part_count < 128 ? 128 : part_count;	/* NumberOfPartitionEntries */
 	*(uint32_t *)&gpt[84] = 128;						/* SizeOfPartitionEntry */
 	*(uint32_t *)&gpt[88] = 0;							/* PartitionEntryArrayCRC32 */
 
@@ -554,7 +554,7 @@ void write_output()
 	}
 
 	/* Do CRC calculations on the partition table entries and GPT headers */
-	CalculateCrc32(parts, part_count * 128, (uint32_t *)&gpt[88]);
+	CalculateCrc32(parts, part_count < 128 ? (128 * 128) : (part_count * 128), (uint32_t *)&gpt[88]);
 	CalculateCrc32(gpt, 96, (uint32_t *)&gpt[16]);
 
 	memcpy(gpt2, gpt, 96);
